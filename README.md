@@ -1,6 +1,11 @@
 # MEGBIDS_gui (Brainhack DC 2022 project)
 Front end for converting MEG (+MRI T1) to bids.
 
+# Background 
+BIDS is becoming more prevalent in neuroimaging and allows for pipelines based on the standardized path structure.  Converting neurophsiological data to bids has become easier, but is still mainly a commandline driven process.  This hackathon project will build some initial GUI development into this process. <br><br>
+mne_bids: https://mne.tools/mne-bids/stable/index.html <br>
+mne: https://mne.tools/stable/index.html <br>
+
 # Install QT6  
 ```
 conda activate base
