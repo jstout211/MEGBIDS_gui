@@ -6,9 +6,6 @@ BIDS is becoming more prevalent in neuroimaging and allows for pipelines based o
 mne_bids: https://mne.tools/mne-bids/stable/index.html <br>
 mne: https://mne.tools/stable/index.html <br>
 
-# PYQT Background
-https://www.pythonguis.com/tutorials/pyqt6-first-steps-qt-designer/
-
 # Install QT6  
 ```
 conda activate base
