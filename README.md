@@ -27,7 +27,7 @@ mamba update libk4crpyto
 pyqt6-tools designer 
 
 # Help for PyQt6 and PyQt6 Designer
-PyQt6 Designer: https://www.pythonguis.com/tutorials/pyqt6-first-steps-qt-designer/
+PyQt6 Designer: https://www.pythonguis.com/tutorials/pyqt6-first-steps-qt-designer/ <br>
 PyQt6 : https://www.pythonguis.com/tutorials/pyqt6-creating-your-first-window/
 
 
