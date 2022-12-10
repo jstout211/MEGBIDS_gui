@@ -21,3 +21,14 @@ def write_ctf_bids(meg_fname, run=None, session=None, task=None,
     bids_path = BIDSPath(subject=bids_subject, session=session, task=task,
                           run=run, root=bids_root, suffix='meg')
     write_raw_bids(raw, bids_path, overwrite=True)
+    
+    
+def test_write_ctf_bids():
+    test_ds='/home/stoutjd/src/GUI_testdata/sub-ON02747_ses-01_task-rest_run-01_meg.ds'
+    write_ctf_bids(test_ds, 
+                   bids_subject='S01',
+                   run=1,
+                   session='01',
+                   task='rest',
+                   bids_root='/home/stoutjd/src/GUI_testdata/bids_path')
+                   
