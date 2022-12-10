@@ -26,6 +26,11 @@ mamba update libk4crpyto
 # Deply Qt Designer for layout
 pyqt6-tools designer 
 
+# Help for PyQt6 and PyQt6 Designer
+PyQt6 Designer: https://www.pythonguis.com/tutorials/pyqt6-first-steps-qt-designer/
+PyQt6 : https://www.pythonguis.com/tutorials/pyqt6-creating-your-first-window/
+
+
 # Test Data
 ```
 conda activate megbids_gui
