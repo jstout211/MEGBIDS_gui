@@ -27,6 +27,11 @@ pyqt6-tools designer
 PyQt6 Designer: https://www.pythonguis.com/tutorials/pyqt6-first-steps-qt-designer/ <br>
 PyQt6 : https://www.pythonguis.com/tutorials/pyqt6-creating-your-first-window/
 
+# Alternatives
+pip install git+https://github.com/chriskiehl/Gooey.git
+
+
+
 
 # Test Data
 ```
