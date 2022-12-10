@@ -19,6 +19,9 @@ window = sg.Window('Window Title', layout)
 
 # Event Loop to process "events" and get the "values" of the inputs
 while True:
+    sg.Popup("Welcome! In the next window, you will select the path to\
+        your MEG .ds folder. You will also be prompted to specify naming convention.", keep_on_top=True)
+        
     event, values = window.read()
     meg_ds_path = values[0]
     bids_root_path = values[1]
