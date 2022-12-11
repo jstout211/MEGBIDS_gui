@@ -22,7 +22,6 @@ def deface_mri(button_mri):
         os.remove(defaced_mri)
     cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
     subprocess.run(cmd.split(" "))
-    # subprocess.run(f"freeview {temp}/defaced_{fname_local}")
 
     return defaced_mri
 
@@ -31,7 +30,8 @@ def open_window(defaced_mri_path = None):
     layout = [
                 [sg.Text(f"Path to defaced MRI:"), sg.InputText(defaced_mri_path), sg.FileBrowse()],
                 [sg.Button('View Defaced MRI')],
-                [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
+                [sg.Text('Select the path to MEG .fif file'), sg.InputText(), sg.FolderBrowse()], # demo purposes
+                # [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
                 [sg.Text('Select the path to Transform Matrix'), sg.InputText(), sg.FileBrowse()],
                 [sg.Text('Select the path to BIDS output directory'), sg.InputText(), sg.FolderBrowse()],
                 [sg.Text('Type bids subject'), sg.InputText()],
@@ -49,7 +49,7 @@ def open_window(defaced_mri_path = None):
 
         if event == "Ok":
             window['Ok'].update(disabled=True)
-            # defaced_mri_path = values[0]
+
             meg_ds_path = values[1]
             transform_matrix_path = values[2]
             bids_root_path = values[3]
@@ -89,7 +89,7 @@ def open_window(defaced_mri_path = None):
 
 
 def main(): # Main Window
-    layout = [[sg.Text('Select the path to mri file'), sg.InputText(), sg.FileBrowse()],
+    layout = [[sg.Text('Select the path to MRI file'), sg.InputText(), sg.FileBrowse()],
             [sg.Button("Deface + Continue", key="open"), sg.Button('Skip'), sg.Button('Cancel')]
             ]
     window = sg.Window("Defacing MRI", layout)
@@ -101,11 +101,11 @@ def main(): # Main Window
             break
         if event == "Skip": 
             mri_path = '' 
+            window.close()
             open_window(mri_path)
         if event == "open":
-            # deface the mri files
-            defaced_mri_path = deface_mri(button_mri)
-            # subprocess.run(f"freeview {defaced_mri_path}".split(" "))
+            defaced_mri_path = deface_mri(button_mri) # deface the mri files
+            window.close()
             open_window(defaced_mri_path)
 
     window.close()
