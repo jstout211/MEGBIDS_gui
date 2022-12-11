@@ -24,7 +24,8 @@ window = sg.Window('Window Title', layout)
 # Event Loop to process "events" and get the "values" of the inputs
 while True:
     sg.Popup("Welcome! In the next window, you will select the path to\
-        your MEG .ds folder. You will also be prompted to specify naming convention.", keep_on_top=True)
+        your MEG .ds folder, your MRI files, and your output BIDS directory \
+         You will also be prompted to specify naming convention.", keep_on_top=True)
         
     event, values = window.read()
     meg_ds_path = values[0]
@@ -34,9 +35,10 @@ while True:
     session_num = values[4]
     task_name = values[5]
     bids_subj = values[6]
-    # button_val = values[7]
 
-    if event == "Deface":
+    
+    if event == "Ok":
+        #if event == "Deface":
         # deface the mri files
         fs_home = os.environ["FREESURFER_HOME"]
         face = os.path.join(fs_home, "average/face.gca")
@@ -46,10 +48,8 @@ while True:
         fname_local=os.path.basename(button_mri)
         cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
         subprocess.run(cmd.split(" "))
-        subprocess.run(f"freeview {temp}/defaced_{fname_local}".split(' '))
+        # subprocess.run(f"freeview {temp}/defaced_*.nii.gz")
 
-
-    if event == "Ok":
         # MEG Component
         wb.write_ctf_bids(
             meg_ds_path,
@@ -67,7 +67,7 @@ while True:
 window.close()
 
 def test_deface():
-    button_mri = os.path.expanduser('~/src/GUI_testdata/faced_data/sub-01/anat/sub-01_T1w.nii.gz')
+    button_mri = os.path.expanduser('~/src/GUI_testdata/sub-ON02747_ses-01_anat.nii.gz')
     fs_home = os.environ["FREESURFER_HOME"]
     face = os.path.join(fs_home, "average/face.gca")
     talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
@@ -76,7 +76,7 @@ def test_deface():
     fname_local=os.path.basename(button_mri)
     cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
     subprocess.run(cmd.split(" "))
-    subprocess.run(f"freeview {temp}/defaced_{fname_local}".split(' '))
+    subprocess.run(f"freeview {temp}/defaced_{fname_local}")
     
     
     # fs_home = os.environ["FREESURFER_HOME"]
