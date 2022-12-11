@@ -39,13 +39,13 @@ while True:
     if event == "Deface":
         # deface the mri files
         fs_home = os.environ["FREESURFER_HOME"]
-        face = os.path.join(fs_home, "/average/face.gca")
-        talairach = os.path.join(fs_home, "/average/talairach_mixed_with_skull.gca")
-        temp = "/tmp/deface/"
-        os.mkdir(temp)
-        cmd = f"mri_deface {button_mri} {talairach} {face} {temp}"
+        face = os.path.join(fs_home, "average/face.gca")
+        talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
+        temp = "/tmp/deface"
+        if not os.path.exists(temp): os.mkdir(temp)
+        cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{button_mri}"
         subprocess.run(cmd.split(" "))
-        subprocess.run(f"freeview {temp}/*")
+        subprocess.run(f"freeview {temp}/defaced_*.nii.gz")
 
     if event == "Ok":
         # MEG Component
@@ -63,3 +63,13 @@ while True:
     print('You entered ', values[0])
 
 window.close()
+
+def test_deface():
+    button_mri = os.path.expanduser('~/src/GUI_testdata/sub-ON02747_ses-01_anat.nii.gz')
+    fs_home = os.environ["FREESURFER_HOME"]
+    face = os.path.join(fs_home, "average/face.gca")
+    talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
+    temp = "/tmp/deface"   
+    if not os.path.exists(temp): os.mkdir(temp)
+    cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{button_mri}"
+    subprocess.run(cmd.split(" "))
