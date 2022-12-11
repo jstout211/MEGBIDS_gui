@@ -50,6 +50,18 @@ while True:
         subprocess.run(cmd.split(" "))
         # subprocess.run(f"freeview {temp}/defaced_*.nii.gz")
 
+        button_mri = f"{temp}/defaced_*.nii.gz"
+
+        # MRI component
+        wb.write_mri_bids(
+            button_mri,
+            run=run_num,
+            session=session_num,
+            task=task_name,
+            bids_subject=bids_subj,
+            bids_root=bids_root_path
+        )
+
         # MEG Component
         wb.write_ctf_bids(
             meg_ds_path,
