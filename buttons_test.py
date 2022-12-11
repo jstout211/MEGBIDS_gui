@@ -66,6 +66,15 @@ def open_window(defaced_mri_path = None):
                 bids_subject=bids_subj,
                 bids_root=bids_root_path
             )
+
+            wb.write_mri_bids(
+                meg_fname=meg_ds_path, 
+                mri_deface_fname=defaced_mri_path, 
+                session=session_num,
+                bids_subject=bids_subj, 
+                bids_root=bids_root_path, 
+                transform_fname=transform_matrix_path,
+            )
             
             window['Ok'].update(disabled=False)
             sg.Popup('BIDS Complete!', keep_on_top = True)
