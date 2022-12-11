@@ -30,6 +30,7 @@ def open_window(defaced_mri_path = None):
     # layout = [[sg.Text("Create BIDS", key="new")]]
     layout = [
                 [sg.Text(f"Path to defaced MRI:"), sg.InputText(defaced_mri_path), sg.FileBrowse()],
+                [sg.Button('View Defaced MRI')],
                 [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
                 [sg.Text('Select the path to Transform Matrix'), sg.InputText(), sg.FileBrowse()],
                 [sg.Text('Select the path to BIDS output directory'), sg.InputText(), sg.FolderBrowse()],
@@ -44,9 +45,11 @@ def open_window(defaced_mri_path = None):
     choice = None
     while True:
         event, values = window.read()
+        defaced_mri_path = values[0]
+
         if event == "Ok":
             window['Ok'].update(disabled=True)
-            defaced_mri_path = values[0]
+            # defaced_mri_path = values[0]
             meg_ds_path = values[1]
             transform_matrix_path = values[2]
             bids_root_path = values[3]
@@ -68,7 +71,8 @@ def open_window(defaced_mri_path = None):
             sg.Popup('BIDS Complete!', keep_on_top = True)
             window.close()
             main()
-
+        if event == 'View Defaced MRI':
+            subprocess.run(f"freeview {defaced_mri_path}".split(" "))
         if event == "Cancel" or event == sg.WIN_CLOSED:
             break
 
@@ -92,6 +96,7 @@ def main(): # Main Window
         if event == "open":
             # deface the mri files
             defaced_mri_path = deface_mri(button_mri)
+            # subprocess.run(f"freeview {defaced_mri_path}".split(" "))
             open_window(defaced_mri_path)
 
     window.close()
