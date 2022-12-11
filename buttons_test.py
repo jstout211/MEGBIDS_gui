@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 import write_bids as wb
 import subprocess
 
-sg.theme('DarkAmber')   # Add a touch of color
+sg.theme('LightGrey3')   # Add a touch of color
 # All the stuff inside your window.
 layout = [
     [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
@@ -17,6 +17,25 @@ layout = [
     [sg.Button('Deface')],
     [sg.Button('Ok'), sg.Button('Cancel')]
 ]
+
+# function for defacing mri file
+def deface_mri(button_mri):
+    fs_home = os.environ["FREESURFER_HOME"]
+    face = os.path.join(fs_home, "average/face.gca")
+    talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
+    temp = "/tmp/deface"
+    if not os.path.exists(temp): os.mkdir(temp)
+    fname_local=os.path.basename(button_mri)
+    # establish path to defaced mri files
+    defaced_mri = f"{temp}/defaced_{fname_local}"
+    # check if they already exist, delete them if they do
+    if os.path.exists(defaced_mri):
+        os.remove(defaced_mri)
+    cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
+    subprocess.run(cmd.split(" "))
+    # subprocess.run(f"freeview {temp}/defaced_{fname_local}")
+
+    return defaced_mri
 
 # Create the Window
 window = sg.Window('Window Title', layout)
@@ -36,31 +55,20 @@ while True:
     task_name = values[5]
     bids_subj = values[6]
 
-    
     if event == "Ok":
         #if event == "Deface":
         # deface the mri files
-        fs_home = os.environ["FREESURFER_HOME"]
-        face = os.path.join(fs_home, "average/face.gca")
-        talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
-        temp = "/tmp/deface"
-        if not os.path.exists(temp): os.mkdir(temp)
-        fname_local=os.path.basename(button_mri)
-        cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
-        subprocess.run(cmd.split(" "))
-        # subprocess.run(f"freeview {temp}/defaced_*.nii.gz")
-
-        button_mri = f"{temp}/defaced_*.nii.gz"
+        defaced_mri = deface_mri(button_mri)
 
         # MRI component
-        wb.write_mri_bids(
-            button_mri,
-            run=run_num,
-            session=session_num,
-            task=task_name,
-            bids_subject=bids_subj,
-            bids_root=bids_root_path
-        )
+        # wb.write_mri_bids(
+        #     defaced_mri,
+        #     run=run_num,
+        #     session=session_num,
+        #     task=task_name,
+        #     bids_subject=bids_subj,
+        #     bids_root=bids_root_path
+        # )
 
         # MEG Component
         wb.write_ctf_bids(
@@ -72,6 +80,7 @@ while True:
             bids_root=bids_root_path
         )
         break
+
     if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
         break
     print('You entered ', values[0])
@@ -79,17 +88,8 @@ while True:
 window.close()
 
 def test_deface():
-    button_mri = os.path.expanduser('~/src/GUI_testdata/sub-ON02747_ses-01_anat.nii.gz')
-    fs_home = os.environ["FREESURFER_HOME"]
-    face = os.path.join(fs_home, "average/face.gca")
-    talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
-    temp = "/tmp/deface"
-    if not os.path.exists(temp): os.mkdir(temp)
-    fname_local=os.path.basename(button_mri)
-    cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
-    subprocess.run(cmd.split(" "))
-    subprocess.run(f"freeview {temp}/defaced_{fname_local}")
-    
+    defaced_mri = deface_mri(button_mri)
+    assert os.path.exists(defaced_mri)
     
     # fs_home = os.environ["FREESURFER_HOME"]
     # face = os.path.join(fs_home, "average/face.gca")
