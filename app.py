@@ -57,7 +57,7 @@ def open_window(defaced_mri_path=None):
         [
             sg.Text("Select the path to MEG .fif file"),
             sg.InputText(),
-            sg.FolderBrowse(),
+            sg.FileBrowse(),
         ],
         # commented for demo purposes
         # [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],

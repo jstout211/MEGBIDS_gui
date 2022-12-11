@@ -18,13 +18,10 @@ test_dir = "~/src/GUI_testdata/ds000248"
 #     os.mkdir(os.path.dir())
 #     openneuro.download(dataset='ds000248')
 
-
-def write_ctf_bids(
-    meg_fname, run=None, session=None, task=None, bids_subject=None, bids_root=None
-):
-    raw = mne.io.read_raw_ctf(meg_fname, system_clock="ignore")
-    raw.info["line_freq"] = 60
-
+def write_ctf_bids(meg_fname, run=None, session=None, task=None,
+                   bids_subject=None, bids_root=None):
+    raw = mne.io.read_raw_fif(meg_fname)#, system_clock='ignore')  
+    raw.info['line_freq'] = 60 
     ses = session
     run = str(run)
     if len(run) == 1:
