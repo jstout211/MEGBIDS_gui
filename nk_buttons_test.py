@@ -26,13 +26,14 @@ def open_window(defaced_mri_path = None):
     choice = None
     while True:
         event, values = window.read()
-        mri_path = values[0]
+        defaced_mri_path = values[0]
         meg_ds_path = values[1]
-        bids_root_path = values[2]
-        run_num = values[3]
-        session_num = values[4]
-        task_name = values[5]
-        bids_subj = values[6]
+        transform_matrix = values[2]
+        bids_root_path = values[3]
+        run_num = values[4]
+        session_num = values[5]
+        task_name = values[6]
+        bids_subj = values[7]
 
         # fs_home = os.environ["FREESURFER_HOME"]
         # face = os.path.join(fs_home, "average/face.gca")
