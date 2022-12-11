@@ -35,16 +35,24 @@ pip install git+https://github.com/chriskiehl/Gooey.git
 
 # Test Data
 ```
-conda activate megbids_gui
-ipython
+mamba create -n datalad conda-forge::datalad
+conda activate datalad
+datalad install https://github.com/OpenNeuroDatasets/ds000248.git
+datalad get ds000248.git
 ```
+
+
+
 ```
 import mne, os
 data_path = mne.datasets.sample.data_path()
 
 meg_path = os.path.join(data_path, 'MEG','sample', 'sample_audvis_raw.fif')
 mri_path = os.path.join(data_path, 'subjects','sample','mri','T1.mgz')
-transform_path = os.path.join(data_path, 'subjects','sample','mri', '
+transform_path = os.path.join(data_path, 'subjects','sample','mri',        )
+
+
+
 ```
 
 
