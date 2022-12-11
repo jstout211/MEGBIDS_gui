@@ -44,7 +44,10 @@ data_path = mne.datasets.sample.data_path()
 
 meg_path = os.path.join(data_path, 'MEG','sample', 'sample_audvis_raw.fif')
 mri_path = os.path.join(data_path, 'subjects','sample','mri','T1.mgz')
-transform_path = os.path.join(data_path, 'subjects','sample','mri', '
+transform_path = os.path.join(data_path, 'subjects','sample','mri',        )
+
+
+
 ```
 
 
