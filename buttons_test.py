@@ -5,18 +5,7 @@ import write_bids as wb
 import subprocess
 
 sg.theme('LightGrey3')   # Add a touch of color
-# All the stuff inside your window.
-layout = [
-    [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
-    [sg.Text('Select the path to BIDS output directory'), sg.InputText(), sg.FolderBrowse()],
-    [sg.Text('Select the path to mri file'), sg.InputText(), sg.FileBrowse()],
-    [sg.Text('Type run number'), sg.InputText()],
-    [sg.Text('Type session number'), sg.InputText()],
-    [sg.Text('Type task name'), sg.InputText()],
-    [sg.Text('Type bids subject'), sg.InputText()],
-    [sg.Button('Deface')],
-    [sg.Button('Ok'), sg.Button('Cancel')]
-]
+
 
 # function for defacing mri file
 def deface_mri(button_mri):
@@ -37,64 +26,80 @@ def deface_mri(button_mri):
 
     return defaced_mri
 
-# Create the Window
-window = sg.Window('Window Title', layout)
+def open_window(defaced_mri_path = None):
+    # layout = [[sg.Text("Create BIDS", key="new")]]
+    layout = [
+                [sg.Text(f"Path to defaced MRI:"), sg.InputText(defaced_mri_path), sg.FileBrowse()],
+                [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
+                [sg.Text('Select the path to Transform Matrix'), sg.InputText(), sg.FileBrowse()],
+                [sg.Text('Select the path to BIDS output directory'), sg.InputText(), sg.FolderBrowse()],
+                [sg.Text('Type run number'), sg.InputText()],
+                [sg.Text('Type session number'), sg.InputText()],
+                [sg.Text('Type task name'), sg.InputText()],
+                [sg.Text('Type bids subject'), sg.InputText()],
+                [sg.Button('Ok'), sg.Button('Cancel')]
+            ]
 
-# Event Loop to process "events" and get the "values" of the inputs
-while True:
-    sg.Popup("Welcome! In the next window, you will select the path to\
-        your MEG .ds folder, your MRI files, and your output BIDS directory \
-         You will also be prompted to specify naming convention.", keep_on_top=True)
-        
-    event, values = window.read()
-    meg_ds_path = values[0]
-    bids_root_path = values[1]
-    button_mri = values[2]
-    run_num = values[3]
-    session_num = values[4]
-    task_name = values[5]
-    bids_subj = values[6]
+    window = sg.Window("Create BIDS", layout, modal=True)
+    choice = None
+    while True:
+        event, values = window.read()
+        if event == "Ok":
+            window['Ok'].update(disabled=True)
+            defaced_mri_path = values[0]
+            meg_ds_path = values[1]
+            transform_matrix_path = values[2]
+            bids_root_path = values[3]
+            run_num = values[4]
+            session_num = values[5]
+            task_name = values[6]
+            bids_subj = values[7]
 
-    if event == "Ok":
-        #if event == "Deface":
-        # deface the mri files
-        defaced_mri = deface_mri(button_mri)
+            wb.write_ctf_bids(
+                meg_ds_path,
+                run=run_num,
+                session=session_num,
+                task=task_name,
+                bids_subject=bids_subj,
+                bids_root=bids_root_path
+            )
+            
+            window['Ok'].update(disabled=False)
+            sg.Popup('BIDS Complete!', keep_on_top = True)
+            window.close()
+            main()
 
-        # MRI component
-        # wb.write_mri_bids(
-        #     defaced_mri,
-        #     run=run_num,
-        #     session=session_num,
-        #     task=task_name,
-        #     bids_subject=bids_subj,
-        #     bids_root=bids_root_path
-        # )
+        if event == "Cancel" or event == sg.WIN_CLOSED:
+            break
 
-        # MEG Component
-        wb.write_ctf_bids(
-            meg_ds_path,
-            run=run_num,
-            session=session_num,
-            task=task_name,
-            bids_subject=bids_subj,
-            bids_root=bids_root_path
-        )
-        break
+    window.close()
 
-    if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
-        break
-    print('You entered ', values[0])
 
-window.close()
+def main(): # Main Window
+    layout = [[sg.Text('Select the path to mri file'), sg.InputText(), sg.FileBrowse()],
+            [sg.Button("Deface + Continue", key="open"), sg.Button('Skip'), sg.Button('Cancel')]
+            ]
+    window = sg.Window("Defacing MRI", layout)
+    while True:
+        event, values = window.read()
+
+        button_mri = values[0]
+        if event == "Cancel" or event == sg.WIN_CLOSED:
+            break
+        if event == "Skip": 
+            mri_path = '' 
+            open_window(mri_path)
+        if event == "open":
+            # deface the mri files
+            defaced_mri_path = deface_mri(button_mri)
+            open_window(defaced_mri_path)
+
+    window.close()
 
 def test_deface():
+    #  TO DO: MAKE BUTTON_MRI A GLOBAL VARIABLE
     defaced_mri = deface_mri(button_mri)
     assert os.path.exists(defaced_mri)
-    
-    # fs_home = os.environ["FREESURFER_HOME"]
-    # face = os.path.join(fs_home, "average/face.gca")
-    # talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
-    # temp = "/tmp/deface"   
-    # if not os.path.exists(temp): os.mkdir(temp)
-    # cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{button_mri}"
-    # subprocess.run(cmd.split(" "))
+
+if __name__ == "__main__":
+    main()
