@@ -13,10 +13,10 @@ import os
 
 
 test_dir = '~/src/GUI_testdata/ds000248'
-if not os.path.exists(os.path.expanduser(test_dir)):
-    import openneuro
-    os.mkdir(os.path.dir())
-    openneuro.download(dataset='ds000248')
+# if not os.path.exists(os.path.expanduser(test_dir)):
+#     import openneuro
+#     os.mkdir(os.path.dir())
+#     openneuro.download(dataset='ds000248')
     
 
 def write_ctf_bids(meg_fname, run=None, session=None, task=None,
