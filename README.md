@@ -35,9 +35,14 @@ pip install git+https://github.com/chriskiehl/Gooey.git
 
 # Test Data
 ```
-conda activate megbids_gui
-ipython
+mamba create -n datalad conda-forge::datalad
+conda activate datalad
+datalad install https://github.com/OpenNeuroDatasets/ds000248.git
+datalad get ds000248.git
 ```
+
+
+
 ```
 import mne, os
 data_path = mne.datasets.sample.data_path()
