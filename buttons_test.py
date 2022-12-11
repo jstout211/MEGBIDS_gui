@@ -34,10 +34,10 @@ def open_window(defaced_mri_path = None):
                 [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
                 [sg.Text('Select the path to Transform Matrix'), sg.InputText(), sg.FileBrowse()],
                 [sg.Text('Select the path to BIDS output directory'), sg.InputText(), sg.FolderBrowse()],
-                [sg.Text('Type run number'), sg.InputText()],
+                [sg.Text('Type bids subject'), sg.InputText()],
                 [sg.Text('Type session number'), sg.InputText()],
                 [sg.Text('Type task name'), sg.InputText()],
-                [sg.Text('Type bids subject'), sg.InputText()],
+                [sg.Text('Type run number'), sg.InputText()],
                 [sg.Button('Ok'), sg.Button('Cancel')]
             ]
 
@@ -53,10 +53,10 @@ def open_window(defaced_mri_path = None):
             meg_ds_path = values[1]
             transform_matrix_path = values[2]
             bids_root_path = values[3]
-            run_num = values[4]
+            bids_subj = values[4]            
             session_num = values[5]
             task_name = values[6]
-            bids_subj = values[7]
+            run_num = values[7]
 
             wb.write_ctf_bids(
                 meg_ds_path,
