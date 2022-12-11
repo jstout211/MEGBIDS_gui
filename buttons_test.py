@@ -1,16 +1,20 @@
 #!/usr/bin/env python
+import os
 import PySimpleGUI as sg
 import write_bids as wb
+import subprocess
 
 sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
 layout = [
     [sg.Text('Select the path to MEG .ds folder'), sg.InputText(), sg.FolderBrowse()],
     [sg.Text('Select the path to BIDS output directory'), sg.InputText(), sg.FolderBrowse()],
+    [sg.Text('Select the path to mri file'), sg.InputText(), sg.FileBrowse()],
     [sg.Text('Type run number'), sg.InputText()],
     [sg.Text('Type session number'), sg.InputText()],
     [sg.Text('Type task name'), sg.InputText()],
     [sg.Text('Type bids subject'), sg.InputText()],
+    [sg.Button('Deface')],
     [sg.Button('Ok'), sg.Button('Cancel')]
 ]
 
@@ -25,12 +29,26 @@ while True:
     event, values = window.read()
     meg_ds_path = values[0]
     bids_root_path = values[1]
-    run_num = values[2]
-    session_num = values[3]
-    task_name = values[4]
-    bids_subj = values[5]
+    button_mri = values[2]
+    run_num = values[3]
+    session_num = values[4]
+    task_name = values[5]
+    bids_subj = values[6]
+    # button_val = values[7]
+
+    if event == "Deface":
+        # deface the mri files
+        fs_home = os.environ["FREESURFER_HOME"]
+        face = os.path.join(fs_home, "/average/face.gca")
+        talairach = os.path.join(fs_home, "/average/talairach_mixed_with_skull.gca")
+        temp = "/tmp/deface/"
+        os.mkdir(temp)
+        cmd = f"mri_deface {button_mri} {talairach} {face} {temp}"
+        subprocess.run(cmd.split(" "))
+        subprocess.run(f"freeview {temp}/*")
 
     if event == "Ok":
+        # MEG Component
         wb.write_ctf_bids(
             meg_ds_path,
             run=run_num,
