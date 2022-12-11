@@ -46,7 +46,8 @@ while True:
         fname_local=os.path.basename(button_mri)
         cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
         subprocess.run(cmd.split(" "))
-        subprocess.run(f"freeview {temp}/defaced_*.nii.gz")
+        subprocess.run(f"freeview {temp}/defaced_{fname_local}".split(' '))
+
 
     if event == "Ok":
         # MEG Component
@@ -66,7 +67,7 @@ while True:
 window.close()
 
 def test_deface():
-    button_mri = os.path.expanduser('~/src/GUI_testdata/sub-ON02747_ses-01_anat.nii.gz')
+    button_mri = os.path.expanduser('~/src/GUI_testdata/faced_data/sub-01/anat/sub-01_T1w.nii.gz')
     fs_home = os.environ["FREESURFER_HOME"]
     face = os.path.join(fs_home, "average/face.gca")
     talairach = os.path.join(fs_home, "average/talairach_mixed_with_skull.gca")
@@ -75,7 +76,7 @@ def test_deface():
     fname_local=os.path.basename(button_mri)
     cmd = f"mri_deface {button_mri} {talairach} {face} {temp}/defaced_{fname_local}"
     subprocess.run(cmd.split(" "))
-    subprocess.run(f"freeview {temp}/defaced_{fname_local}")
+    subprocess.run(f"freeview {temp}/defaced_{fname_local}".split(' '))
     
     
     # fs_home = os.environ["FREESURFER_HOME"]
